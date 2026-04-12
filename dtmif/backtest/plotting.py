@@ -16,7 +16,7 @@ def plot_results_v2(
     metrics_oos: dict,
     out_path: str = "backtest_v2_plot.png",
 ) -> None:
-    """4-panel diagnostic plot for the improved backtest."""
+    """Write the four-panel backtest figure to ``out_path``."""
     fig, axes = plt.subplots(4, 1, figsize=(14, 16), sharex=False)
     fig.patch.set_facecolor("#F7F6F2")
     for ax in axes:

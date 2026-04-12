@@ -16,9 +16,7 @@ def compute_pnl_v2(
     T: float = T_OPTION,
     use_theta_gamma: bool = True,
 ) -> pd.DataFrame:
-    """
-    P&L with corrected sign convention and optional theta–gamma decomposition.
-    """
+    """Daily P&L; theta–gamma path when ``use_theta_gamma``, else vega approximation."""
     sig_lag = signals.shift(1)
     size_lag = sizes.shift(1).fillna(0)
 

@@ -11,11 +11,7 @@ def position_size(
     max_size: float = MAX_POSITION,
     target_vol: float = 0.15,
 ) -> pd.Series:
-    """
-    Dynamic position size based on signal strength and inverse-vol scaling.
-
-    size_t = clip(|spread_t| / avg_spread, 0, max_size) × (target_vol / RV_t)
-    """
+    """Size from normalized spread and inverse vol, capped at ``max_size``."""
     spread_norm = vrp_spread.abs() / vrp_spread.abs().rolling(60).mean().fillna(
         vrp_spread.abs().mean()
     )

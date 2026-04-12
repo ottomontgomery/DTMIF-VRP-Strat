@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def compute_risk_metrics(pnl: pd.Series, label: str = "Strategy") -> dict:
-    """Risk metrics with drawdown % handling when peak equity stays ≤ 0."""
+    """Risk metrics from a daily P&L series."""
     clean = pnl.dropna()
     n = len(clean)
 
@@ -64,7 +64,7 @@ def compute_risk_metrics(pnl: pd.Series, label: str = "Strategy") -> dict:
 
 
 def print_risk_report(m: dict) -> None:
-    """Pretty-print the risk metrics dict."""
+    """Print ``m`` as a formatted table."""
     w = 55
     print(f"\n{'='*w}")
     print(f"  RISK REPORT: {m['label']}")

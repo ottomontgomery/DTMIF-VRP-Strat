@@ -26,7 +26,7 @@ from dtmif.backtest.signals import generate_signals_v2
 
 
 def run_backtest() -> None:
-    """Load data, build signals, P&L, metrics; write CSV/PNG to the current working directory."""
+    """Run full backtest and write CSV/PNG in the working directory."""
     print("=" * 60)
     print("  VOLATILITY STRATEGY BACKTEST v2 — SPY")
     print("=" * 60)
@@ -103,7 +103,7 @@ def run_backtest() -> None:
         f"Flat={signal_counts.get(0, 0)}  Long={signal_counts.get(1, 0)}"
     )
     pct_active = (df["signal"] != 0).mean()
-    print(f"  % time active: {pct_active:.1%}  (was 98.2% in v1 — now regime-filtered)")
+    print(f"  % time active: {pct_active:.1%}")
 
     print("\n[5] Computing dynamic position sizes...")
     df["pos_size"] = position_size(
@@ -167,7 +167,4 @@ def run_backtest() -> None:
     plot_results_v2(df, metrics_is, metrics_oos, out_path="backtest_v2_plot.png")
 
     print("\n[DONE] All outputs saved.")
-    print("\nKey improvement vs v1:")
-    print("  v1 Sharpe: -16.27  (sign bug + circular IV)")
-    print(f"  v2 Sharpe: {metrics_all['sharpe']:.2f}  (fixed)")
-    print(f"  % time active reduced from 98.2% → {pct_active:.1%}")
+    print(f"  Full-sample Sharpe: {metrics_all['sharpe']:.2f}")

@@ -11,30 +11,7 @@ def har_rv_forecast(
     trading_days: int = 252,
     forecast_horizon: int = 1,
 ) -> pd.Series:
-    """
-    Heterogeneous Autoregressive Realized Variance (HAR-RV) model.
-    Corsi (2009) — one of the best performing realized vol forecasting models.
-
-    Specification:
-        RV_{t+h} = α + β_d×RV_d_t + β_w×RV_w_t + β_m×RV_m_t + ε
-
-    where:
-        RV_d  = daily realized variance (squared log return)
-        RV_w  = average of last 5 daily RVs (weekly component)
-        RV_m  = average of last 22 daily RVs (monthly component)
-
-    The model captures the long-memory property of volatility using a
-    simple linear structure with three overlapping realized var components.
-
-    Parameters
-    ----------
-    close            : pd.Series  - Adjusted close prices
-    forecast_horizon : int        - Forecast steps ahead (default 1 = tomorrow)
-
-    Returns
-    -------
-    pd.Series: one-step-ahead vol forecast
-    """
+    """HAR-RV rolling OLS forecast from daily, weekly, and monthly realized variance lags."""
     log_ret = np.log(close / close.shift(1)).dropna()
     rv = log_ret**2
 

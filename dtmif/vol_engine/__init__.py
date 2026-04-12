@@ -1,8 +1,4 @@
-"""
-Improved volatility engine — v2.
-
-Yang–Zhang realized vol, GJR-GARCH, HAR-RV, forecast combination, optional VIX via FRED.
-"""
+"""Volatility engine: realized vol, GARCH, HAR-RV, ensemble, loaders."""
 
 import warnings
 

@@ -20,25 +20,7 @@ def garch_vol_forecast(
     trading_days: int = 252,
     use_gjr: bool = True,
 ) -> pd.Series:
-    """
-    One-step-ahead conditional volatility forecast from GARCH(1,1) or GJR-GARCH.
-
-    GJR-GARCH (Glosten-Jagannathan-Runkle, 1993) is preferred over standard
-    GARCH for equity vol because it captures the leverage effect:
-    negative returns increase subsequent volatility more than positive returns
-    of the same magnitude. For SPY, this is empirically well-documented.
-
-    Parameters
-    ----------
-    close     : pd.Series  - Adjusted close prices
-    p, q      : int        - GARCH lag orders
-    use_gjr   : bool       - Use GJR-GARCH (asymmetric) if True, else GARCH
-    annualize : bool       - Multiply by sqrt(252)
-
-    Returns
-    -------
-    pd.Series of one-step-ahead conditional vol forecast, same index as close
-    """
+    """One-step-ahead GARCH or GJR-GARCH conditional vol; EWMA if arch missing or fit fails."""
     if not ARCH_OK:
         print("WARNING: arch not available. Returning EWMA as fallback.")
         return ewma_vol(close, annualize=annualize)

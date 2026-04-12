@@ -16,10 +16,7 @@ except ImportError:
 
 
 def load_spy_ohlcv(start: str = "2019-01-01", end: str = None) -> pd.DataFrame:
-    """
-    Load SPY daily OHLCV data (adjusted).
-    Required for Yang-Zhang and Rogers-Satchell estimators.
-    """
+    """SPY daily OHLCV (adjusted)."""
     if not YFINANCE_OK:
         raise ImportError("pip install yfinance")
     ticker = yf.Ticker("SPY")
@@ -32,15 +29,7 @@ def load_spy_ohlcv(start: str = "2019-01-01", end: str = None) -> pd.DataFrame:
 
 
 def load_vix(start: str = "2019-01-01") -> pd.Series:
-    """
-    Download CBOE VIX daily close from FRED.
-
-    VIX is the model-free 30-day IV of S&P 500 options.
-    Use as the IV proxy instead of simulating IV from EWMA.
-
-    Note: VIX is quoted as an annualised vol percentage (e.g. 20 = 20% vol).
-    We convert to decimal for comparability with HV measures.
-    """
+    """VIX daily close from FRED (percentage points → decimal)."""
     if not PDR_OK:
         raise ImportError("pip install pandas-datareader")
 

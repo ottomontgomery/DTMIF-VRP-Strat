@@ -10,31 +10,7 @@ def yang_zhang_vol(
     annualize: bool = True,
     trading_days: int = 252,
 ) -> pd.Series:
-    """
-    Yang-Zhang (2000) volatility estimator.
-
-    Minimum-variance unbiased estimator using open, high, low, close.
-    Handles overnight gaps and intraday volatility separately — typically
-    30–40% more efficient than close-to-close standard deviation.
-
-    Components:
-        σ²_YZ = σ²_overnight + k·σ²_open-to-close + (1-k)·σ²_RS
-
-    where:
-        σ²_overnight = var(log(Open_t / Close_{t-1}))   [overnight component]
-        σ²_RS        = Rogers-Satchell intraday estimator
-        k            = 0.34 / (1.34 + (n+1)/(n-1))     [optimal mixing weight]
-
-    Parameters
-    ----------
-    ohlcv   : pd.DataFrame with columns open, high, low, close
-    window  : int  - Rolling window in trading days
-    annualize : bool
-
-    Returns
-    -------
-    pd.Series named 'yz_vol'
-    """
+    """Yang–Zhang realized vol from OHLC (overnight + Rogers–Satchell + open–close mix)."""
     log_ho = np.log(ohlcv["high"] / ohlcv["open"])
     log_lo = np.log(ohlcv["low"] / ohlcv["open"])
     log_co = np.log(ohlcv["close"] / ohlcv["open"])
@@ -81,7 +57,7 @@ def ewma_vol(
     annualize: bool = True,
     trading_days: int = 252,
 ) -> pd.Series:
-    """EWMA volatility — RiskMetrics λ=0.94 (from v1, unchanged)."""
+    """EWMA vol, RiskMetrics λ=0.94."""
     log_ret = np.log(close / close.shift(1)).dropna()
     r = log_ret.values
     n = len(r)
