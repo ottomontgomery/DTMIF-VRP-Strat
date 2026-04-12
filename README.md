@@ -1,15 +1,15 @@
-# DTMIF — Volatility engine & VRP backtest
+# vrp_strat — Volatility engine & VRP backtest
 
 Python package for a **volatility forecasting stack** (Yang–Zhang, EWMA, GJR-GARCH, HAR-RV) and a **SPY volatility risk premium (VRP) backtest** using VIX as an implied-vol proxy.
 
 ## Setup
 
 ```bash
-cd DTMIF_Project
+cd VRP_Project_DTMIF   # or your clone path
 python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-# Editable install (adds `dtmif-backtest` / `dtmif-vol-demo` CLI commands):
+# Editable install (adds `vrp-backtest` / `vrp-vol-demo` CLI commands):
 pip install -e .
 ```
 
@@ -20,19 +20,13 @@ Needs **network access** for Yahoo Finance (SPY, VIX) and optional FRED (VIX in 
 From the repo root (outputs are written to the **current working directory**):
 
 ```bash
-python backtest_v2.py
-```
-
-Or:
-
-```bash
-python -m dtmif.backtest
+python -m vrp_strat.backtest
 ```
 
 After `pip install -e .`:
 
 ```bash
-dtmif-backtest
+vrp-backtest
 ```
 
 Produces:
@@ -44,19 +38,13 @@ Produces:
 ## Run the volatility engine demo
 
 ```bash
-python vol_engine_v2.py
+python -m vrp_strat.vol_engine
 ```
 
 Or:
 
 ```bash
-python -m dtmif.vol_engine
-```
-
-Or:
-
-```bash
-dtmif-vol-demo
+vrp-vol-demo
 ```
 
 Writes `spy_volatility_v2.csv` (and prints a short RMSE table).
@@ -65,16 +53,14 @@ Writes `spy_volatility_v2.csv` (and prints a short RMSE table).
 
 | Path | Purpose |
 |------|--------|
-| `dtmif/vol_engine/` | Data loaders, realized vol, GARCH, HAR-RV, forecast combination, Black–Scholes helpers |
-| `dtmif/backtest/` | Config, signals, sizing, P&L, risk metrics, plots, full `run_backtest()` pipeline |
-| `backtest_v2.py` | Thin wrapper — re-exports API and runs `run_backtest()` |
-| `vol_engine_v2.py` | Thin wrapper — re-exports engine API and runs the vol demo |
+| `vrp_strat/vol_engine/` | Data loaders, realized vol, GARCH, HAR-RV, forecast combination, Black–Scholes helpers |
+| `vrp_strat/backtest/` | Config, signals, sizing, P&L, risk metrics, plots, full `run_backtest()` pipeline |
 
-New code should import from `dtmif.vol_engine` and `dtmif.backtest` instead of the root shims.
+Import from `vrp_strat.vol_engine` and `vrp_strat.backtest`.
 
 ## Configuration
 
-Strategy parameters (thresholds, IS/OOS split date, option tenor for P&L, etc.) live in `dtmif/backtest/config.py`.
+Strategy parameters (thresholds, IS/OOS split date, option tenor for P&L, etc.) live in `vrp_strat/backtest/config.py`.
 
 ## License
 

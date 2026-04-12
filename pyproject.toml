@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dtmif"
+name = "vrp-strat"
 version = "0.2.0"
 description = "Volatility engine and SPY VRP backtest (v2)"
 readme = "README.md"
@@ -24,12 +24,12 @@ dependencies = [
 dev = ["ruff>=0.1.0"]
 
 [project.scripts]
-dtmif-backtest = "dtmif.backtest.pipeline:run_backtest"
-dtmif-vol-demo = "dtmif.vol_engine.cli:main"
+vrp-backtest = "vrp_strat.backtest.pipeline:run_backtest"
+vrp-vol-demo = "vrp_strat.vol_engine.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["dtmif*"]
+include = ["vrp_strat*"]
 
 [tool.ruff]
 line-length = 100
