@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from dtmif.vol_engine import (
+from vrp_strat.vol_engine import (
     close_to_close_vol,
     combine_forecasts,
     ewma_vol,
