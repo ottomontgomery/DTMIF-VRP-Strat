@@ -1,0 +1,10 @@
+"""Backtest parameters and defaults."""
+
+RISK_FREE_RATE = 0.05
+THRESHOLD = 0.02
+LAMBDA_EWMA = 0.94
+MAX_POSITION = 1.0
+VOL_OF_VOL_LIMIT = 0.035
+VRP_MIN_SIGNAL = 0.01
+IS_END = "2023-12-31"
+T_OPTION = 21 / 252
