@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def compute_risk_metrics(pnl: pd.Series, label: str = "Strategy") -> dict:
-    """Risk metrics from a daily P&L series."""
+    """Risk metrics for daily **fractional** P&L (e.g. spot-normalized returns)."""
     clean = pnl.dropna()
     n = len(clean)
 
@@ -23,14 +23,9 @@ def compute_risk_metrics(pnl: pd.Series, label: str = "Strategy") -> dict:
 
     max_abs_dd = dd.min()
 
-    cum0 = pd.concat([pd.Series([0.0]), cum])
-    peak0 = cum0.cummax()
-    dd0 = cum0 - peak0
-    peak0_pos = peak0[peak0 > 0]
-    if len(peak0_pos) > 0:
-        pct_dd = (dd0[peak0_pos.index] / peak0_pos).min()
-    else:
-        pct_dd = np.nan
+    # Cumulative equity is sum of fractional daily P&L; peak-relative % from a
+    # synthetic zero start produced misleading extremes when equity stayed ≤ 0.
+    pct_dd = max_abs_dd
 
     calmar = ann_return / abs(max_abs_dd) if max_abs_dd != 0 else np.nan
 
@@ -76,15 +71,11 @@ def print_risk_report(m: dict) -> None:
         ("Sharpe Ratio (ann.)", f"{m['sharpe']:.4f}"),
         ("Sortino Ratio (ann.)", f"{m['sortino']:.4f}"),
         ("Calmar Ratio", f"{m['calmar']:.4f}"),
-        ("VaR 95% (daily $)", f"${m['var_95']:.6f}"),
-        ("CVaR 95% (daily $)", f"${m['cvar_95']:.6f}"),
-        ("VaR 99% (daily $)", f"${m['var_99']:.6f}"),
-        ("CVaR 99% (daily $)", f"${m['cvar_99']:.6f}"),
-        ("Max Abs Drawdown ($)", f"${m['max_abs_dd']:.4f}"),
-        (
-            "Max % Drawdown",
-            f"{m['max_pct_dd']:.2%}" if m["max_pct_dd"] is not np.nan else "N/A (never in profit)",
-        ),
+        ("VaR 95% (daily, notional)", f"{m['var_95']:.4%}"),
+        ("CVaR 95% (daily, notional)", f"{m['cvar_95']:.4%}"),
+        ("VaR 99% (daily, notional)", f"{m['var_99']:.4%}"),
+        ("CVaR 99% (daily, notional)", f"{m['cvar_99']:.4%}"),
+        ("Max drawdown (cum. return)", f"{m['max_abs_dd']:.2%}"),
         ("Win Rate", f"{m['win_rate']:.1%}"),
         ("Profit Factor", f"{m['profit_factor']:.4f}"),
     ]

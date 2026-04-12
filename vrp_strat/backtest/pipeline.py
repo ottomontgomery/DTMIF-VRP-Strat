@@ -1,4 +1,4 @@
-"""End-to-end volatility strategy backtest (v2)."""
+"""End-to-end volatility strategy backtest (v3 P&L / risk conventions)."""
 
 import warnings
 
@@ -28,7 +28,7 @@ from vrp_strat.backtest.signals import generate_signals_v2
 def run_backtest() -> None:
     """Run full backtest and write CSV/PNG in the working directory."""
     print("=" * 60)
-    print("  VOLATILITY STRATEGY BACKTEST v2 — SPY")
+    print("  VOLATILITY STRATEGY BACKTEST v3 — SPY")
     print("=" * 60)
 
     print("\n[1] Loading data...")
@@ -137,8 +137,8 @@ def run_backtest() -> None:
     print_risk_report(metrics_oos)
 
     print("\n[8] Saving outputs...")
-    df.to_csv("backtest_v2_results.csv")
-    print("  Full results → backtest_v2_results.csv")
+    df.to_csv("backtest_v3_results.csv")
+    print("  Full results → backtest_v3_results.csv")
 
     report_rows = []
     for m in [metrics_all, metrics_is, metrics_oos]:
@@ -151,20 +151,20 @@ def run_backtest() -> None:
                 "Sharpe": f"{m['sharpe']:.4f}",
                 "Sortino": f"{m['sortino']:.4f}",
                 "Calmar": f"{m['calmar']:.4f}",
-                "VaR 95%": f"${m['var_95']:.6f}",
-                "CVaR 95%": f"${m['cvar_95']:.6f}",
-                "VaR 99%": f"${m['var_99']:.6f}",
-                "CVaR 99%": f"${m['cvar_99']:.6f}",
-                "Max Abs DD": f"${m['max_abs_dd']:.4f}",
+                "VaR 95%": f"{m['var_95']:.4%}",
+                "CVaR 95%": f"{m['cvar_95']:.4%}",
+                "VaR 99%": f"{m['var_99']:.4%}",
+                "CVaR 99%": f"{m['cvar_99']:.4%}",
+                "Max DD (cum. return)": f"{m['max_abs_dd']:.2%}",
                 "Win Rate": f"{m['win_rate']:.1%}",
                 "Profit Factor": f"{m['profit_factor']:.4f}",
             }
         )
-    pd.DataFrame(report_rows).to_csv("backtest_v2_risk_report.csv", index=False)
-    print("  Risk report → backtest_v2_risk_report.csv")
+    pd.DataFrame(report_rows).to_csv("backtest_v3_risk_report.csv", index=False)
+    print("  Risk report → backtest_v3_risk_report.csv")
 
     print("\n[9] Generating chart...")
-    plot_results_v2(df, metrics_is, metrics_oos, out_path="backtest_v2_plot.png")
+    plot_results_v2(df, metrics_is, metrics_oos, out_path="backtest_v3_plot.png")
 
     print("\n[DONE] All outputs saved.")
     print(f"  Full-sample Sharpe: {metrics_all['sharpe']:.2f}")

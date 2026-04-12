@@ -14,7 +14,7 @@ def plot_results_v2(
     df: pd.DataFrame,
     metrics_is: dict,
     metrics_oos: dict,
-    out_path: str = "backtest_v2_plot.png",
+    out_path: str = "backtest_v3_plot.png",
 ) -> None:
     """Write the four-panel backtest figure to ``out_path``."""
     fig, axes = plt.subplots(4, 1, figsize=(14, 16), sharex=False)
@@ -85,7 +85,7 @@ def plot_results_v2(
     ax.axvline(split, color=GREY, ls=":", lw=1.2, label=f"IS/OOS split ({IS_END})")
     ax.axhline(0, color=GREY, lw=0.8, alpha=0.5)
     ax.set_title("Cumulative P&L — In-Sample vs. Out-of-Sample", fontsize=12, fontweight="bold", pad=8)
-    ax.set_ylabel("P&L ($ per $100 notional)")
+    ax.set_ylabel("Cumulative return (fraction of notional)")
     ax.legend(fontsize=9, framealpha=0.6)
 
     ax = axes[3]
@@ -97,7 +97,7 @@ def plot_results_v2(
         cum_full.plot(ax=ax, color=DARK, lw=2, ls="--", label="Net P&L")
         ax.axhline(0, color=GREY, lw=0.8, alpha=0.5)
         ax.set_title("Theta vs. Gamma Decomposition", fontsize=12, fontweight="bold", pad=8)
-        ax.set_ylabel("Cumulative P&L ($)")
+        ax.set_ylabel("Cumulative (fraction of notional)")
         ax.legend(fontsize=9, framealpha=0.6)
     else:
         df["pnl"].dropna().plot(ax=ax, color=TEAL, lw=1, alpha=0.5)

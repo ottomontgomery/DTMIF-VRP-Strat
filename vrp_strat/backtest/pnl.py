@@ -16,11 +16,12 @@ def compute_pnl_v2(
     T: float = T_OPTION,
     use_theta_gamma: bool = True,
 ) -> pd.DataFrame:
-    """Daily P&L; theta–gamma path when ``use_theta_gamma``, else vega approximation."""
+    """Daily fractional P&L on notional (theta–gamma or vega); scales by ``/ spot``."""
     sig_lag = signals.shift(1)
     size_lag = sizes.shift(1).fillna(0)
 
     log_ret = np.log(spot / spot.shift(1))
+    spot_safe = spot.clip(lower=1e-6)
 
     if use_theta_gamma:
         iv_daily_var = (implied_vol**2) / 252.0
@@ -33,13 +34,13 @@ def compute_pnl_v2(
 
         pnl_unit = sig_lag * (rv_daily_var - iv_daily_var) * dollar_gamma
 
-        pnl = pnl_unit * size_lag / 100.0
+        pnl = pnl_unit * size_lag / spot_safe
 
         result = pd.DataFrame(
             {
                 "pnl": pnl,
-                "theta_pnl": sig_lag * (-1) * theta_term * size_lag / 100.0,
-                "gamma_pnl": sig_lag * (-1) * (-rv_daily_var) * dollar_gamma * size_lag / 100.0,
+                "theta_pnl": sig_lag * (-1) * theta_term * size_lag / spot_safe,
+                "gamma_pnl": sig_lag * (-1) * (-rv_daily_var) * dollar_gamma * size_lag / spot_safe,
                 "position": sig_lag,
                 "size": size_lag,
             }
@@ -48,7 +49,7 @@ def compute_pnl_v2(
     else:
         vol_surprise = realized_vol - implied_vol
         vega_atm = spot * np.sqrt(T / (2 * np.pi))
-        pnl = sig_lag * size_lag * vega_atm * vol_surprise / 100.0
+        pnl = sig_lag * size_lag * vega_atm * vol_surprise / spot_safe
 
         result = pd.DataFrame(
             {

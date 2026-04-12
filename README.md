@@ -15,9 +15,16 @@ pip install -e .
 
 Needs **network access** for Yahoo Finance (SPY, VIX) and optional FRED (VIX in the vol demo via `pandas-datareader`).
 
-## Run the backtest (same outputs as before)
+## Run the backtest
 
 From the repo root (outputs are written to the **current working directory**):
+
+```bash
+pip install -e .   # once, so imports resolve
+python backtest_v3.py
+```
+
+Or:
 
 ```bash
 python -m vrp_strat.backtest
@@ -29,11 +36,13 @@ After `pip install -e .`:
 vrp-backtest
 ```
 
+Daily P&L is a **fraction of notional** (theta–gamma terms scaled by `size / spot`). Risk tables label VaR and drawdowns in those units (not dollars).
+
 Produces:
 
-- `backtest_v2_results.csv`
-- `backtest_v2_risk_report.csv`
-- `backtest_v2_plot.png`
+- `backtest_v3_results.csv`
+- `backtest_v3_risk_report.csv`
+- `backtest_v3_plot.png`
 
 ## Run the volatility engine demo
 
