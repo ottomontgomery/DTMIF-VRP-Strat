@@ -17,20 +17,13 @@ Needs **network access** for Yahoo Finance (SPY, VIX) and optional FRED (VIX in 
 
 ## Run the backtest
 
-From the repo root (outputs are written to the **current working directory**):
-
-```bash
-pip install -e .   # once, so imports resolve
-python backtest_v3.py
-```
-
-Or:
+From the repo root (outputs are written to the **current working directory**). Use the package after `pip install -e .` (see Setup):
 
 ```bash
 python -m vrp_strat.backtest
 ```
 
-After `pip install -e .`:
+Or the installed CLI:
 
 ```bash
 vrp-backtest
